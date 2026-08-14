@@ -3,18 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Evita que iOS convierta números largos en enlaces azules -->
+    <meta name="format-detection" content="telephone=no">
     <title>Mis XV Años - Ale</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Pinyon+Script&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Paleta Premium Dorada y Luminosa */
-            --bg-pearl: #FCFBF8;       
+            /* Paleta Premium Cálida (Crema, Perla y Dorado) */
             --bg-white: #FFFFFF;         
+            --bg-pearl: #FDF9F1; /* Crema muy claro */
+            --bg-cream: #F3EAE0; /* Crema con más contraste */     
             --gold-primary: #C59B3C;    
             --gold-light: #F3E5AB;      
             --gold-gradient: linear-gradient(135deg, #BF953F, #FCF6BA, #B38728, #FBF5B7, #AA771C);
             --text-dark: #2C2A26;      
-            --text-muted: #6B6356;
+            --text-muted: #7A7265;
             
             --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
         }
@@ -34,25 +37,35 @@
             scroll-behavior: smooth;
         }
 
-        /* --- EFECTO DE BRILLOS (SPARKLES) --- */
+        /* --- EFECTO DE POLVO DE ORO (SPARKLES FLOTANTES) --- */
         .sparkle-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; overflow: hidden;
         }
         .sparkle {
             position: absolute;
-            width: 4px; height: 4px;
-            background-color: #FFF;
+            width: 3px; height: 3px;
+            background-color: var(--gold-light);
             border-radius: 50%;
-            box-shadow: 0 0 10px 3px rgba(191, 149, 63, 0.6);
+            box-shadow: 0 0 8px 2px rgba(191, 149, 63, 0.5);
             animation: float-sparkle 6s infinite linear;
             opacity: 0;
         }
         @keyframes float-sparkle {
             0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            20% { opacity: 0.8; transform: translateY(80vh) scale(1); }
-            80% { opacity: 0.8; transform: translateY(20vh) scale(1.2); }
+            20% { opacity: 0.7; transform: translateY(80vh) scale(1); }
+            80% { opacity: 0.7; transform: translateY(20vh) scale(1.2); }
             100% { transform: translateY(-10vh) scale(0); opacity: 0; }
+        }
+
+        /* Destellos estáticos SVG */
+        .static-sparkle {
+            position: absolute; width: 25px; height: 25px; fill: var(--gold-primary);
+            opacity: 0; animation: twinkle 3s infinite ease-in-out;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.1); filter: drop-shadow(0 0 5px rgba(191, 149, 63, 0.6)); }
         }
 
         /* --- REPRODUCTOR DE MÚSICA (STICKY) --- */
@@ -81,7 +94,6 @@
             z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center;
             transition: opacity 1.2s ease-in-out, visibility 1.2s;
         }
-        /* Capa negra súper reducida, casi imperceptible, solo para asegurar que el texto blanco sea legible */
         #envelope-screen::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.15); z-index: 1;
@@ -133,7 +145,7 @@
         }
         .envelope-wrapper.open .front-flap { transform: rotateX(180deg); z-index: 1; }
         
-        /* SELLO.PNG SIN FONDO NI SOMBRAS EXTRAÑAS */
+        /* SELLO PNG */
         .wax-seal {
             position: absolute; top: 95px; left: 50%; transform: translateX(-50%);
             width: 70px; height: 70px; z-index: 5;
@@ -165,7 +177,6 @@
         .anim-fade-up.in-view { opacity: 1; transform: translateY(0); }
         .anim-zoom { transform: scale(0.92); }
         .anim-zoom.in-view { opacity: 1; transform: scale(1); }
-        /* Efecto de revelación para imágenes */
         .anim-reveal { clip-path: inset(100% 0 0 0); transition: clip-path 1.5s var(--transition-smooth); }
         .anim-reveal.in-view { clip-path: inset(0 0 0 0); opacity: 1; }
 
@@ -174,12 +185,14 @@
         .delay-3 { transition-delay: 0.5s; }
         .delay-4 { transition-delay: 0.7s; }
 
+        /* Alternancia de Fondos para Contraste */
         .section-block {
             width: 100%; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; text-align: center;
             position: relative; overflow: hidden;
         }
-        .bg-pearl { background-color: var(--bg-pearl); }
         .bg-white { background-color: var(--bg-white); }
+        .bg-pearl { background-color: var(--bg-pearl); }
+        .bg-cream { background-color: var(--bg-cream); }
 
         /* HERO PROTAGÓNICO CON DISEÑO EDITORIAL */
         .hero-section {
@@ -190,7 +203,7 @@
             width: 100%; max-width: 450px; position: relative;
             padding: 15px; border: 1px solid var(--gold-primary);
             border-radius: 200px 200px 0 0; /* Forma de arco */
-            margin-bottom: 40px;
+            margin-bottom: 40px; background: var(--bg-pearl);
         }
         .hero-image-wrapper {
             width: 100%; aspect-ratio: 3/4; overflow: hidden;
@@ -211,7 +224,7 @@
         .title-script {
             font-family: 'Pinyon Script', cursive; font-size: 110px;
             background: var(--gold-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px; line-height: 1; font-weight: 400; padding: 10px;
+            margin-bottom: 10px; line-height: 1; font-weight: 400; padding: 10px; position: relative; display: inline-block;
         }
         .body-serif {
             font-family: 'Cormorant Garamond', serif; font-size: 26px;
@@ -226,7 +239,7 @@
         .photo-frame {
             width: 100%; max-width: 450px; margin: 40px auto;
             position: relative; z-index: 2; padding: 10px;
-            background: #FFF; box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+            background: #FFF; box-shadow: 0 20px 40px rgba(0,0,0,0.06);
             border: 1px solid rgba(191, 149, 63, 0.2);
         }
         .photo-frame img { width: 100%; display: block; filter: contrast(1.05); }
@@ -235,6 +248,7 @@
         .info-title {
             font-family: 'Cinzel', serif; font-size: 14px; letter-spacing: 5px; line-height: 1.4;
             text-transform: uppercase; color: var(--gold-primary); margin-bottom: 15px; font-weight: 600;
+            position: relative; display: inline-block;
         }
         .info-data {
             font-family: 'Cormorant Garamond', serif; font-size: 38px;
@@ -249,15 +263,15 @@
             font-weight: 600; letter-spacing: 4px; text-transform: uppercase;
             text-decoration: none; border: none; cursor: pointer; border-radius: 30px;
             transition: all 0.4s ease; margin-top: 35px; position: relative; z-index: 5;
-            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.4); text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 25px rgba(191, 149, 63, 0.3); text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-        .btn-solid:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(191, 149, 63, 0.6); }
+        .btn-solid:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(191, 149, 63, 0.5); }
 
         /* Widget de Calendario Luminoso */
         .calendar-wrapper {
             width: 100%; max-width: 360px; margin: 40px auto; padding: 40px 25px;
             background: #FFF; border-radius: 4px; 
-            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.04);
             border: 1px solid rgba(191, 149, 63, 0.2); position: relative; z-index: 2;
         }
         .calendar-month {
@@ -276,16 +290,16 @@
         }
         .cal-day.active {
             background: var(--gold-gradient); color: #FFF; border-radius: 50%; 
-            font-weight: 600; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.5);
+            font-weight: 600; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.4);
         }
 
         /* Mapas */
         .map-box {
             width: 100%; max-width: 600px; height: 350px; margin: 30px auto;
-            border-radius: 2px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); position: relative; z-index: 2;
+            border-radius: 2px; box-shadow: 0 15px 40px rgba(0,0,0,0.08); position: relative; z-index: 2;
             border: 5px solid #FFF; overflow: hidden;
         }
-        .map-box iframe { width: 100%; height: 100%; border: none; filter: grayscale(20%) contrast(1.1); }
+        .map-box iframe { width: 100%; height: 100%; border: none; filter: grayscale(10%) contrast(1.05); }
 
         /* Itinerario Timeline */
         .timeline-container {
@@ -301,7 +315,7 @@
         .timeline-dot {
             position: absolute; left: 6px; top: 5px; width: 10px; height: 10px;
             background: var(--bg-white); border: 2px solid var(--gold-primary); border-radius: 50%;
-            box-shadow: 0 0 10px rgba(191, 149, 63, 0.5);
+            box-shadow: 0 0 10px rgba(191, 149, 63, 0.4);
         }
         .timeline-time {
             font-family: 'Cinzel', serif; font-size: 16px; color: var(--gold-primary); font-weight: 600; margin-bottom: 5px; letter-spacing: 2px;
@@ -322,6 +336,17 @@
         select.input-line option { background: #FFF; color: var(--text-dark); }
         textarea.input-line { resize: vertical; min-height: 100px; }
 
+        /* Footer / Firma */
+        .concierge-footer {
+            width: 100%; padding: 40px 20px; background-color: var(--bg-cream); text-align: center;
+            font-family: 'Montserrat', sans-serif; font-size: 10px; letter-spacing: 3px; 
+            text-transform: uppercase; color: var(--text-muted);
+            border-top: 1px solid rgba(191, 149, 63, 0.15);
+        }
+        .concierge-footer .brand {
+            display: block; margin-top: 8px; font-size: 12px; font-weight: 600; color: var(--gold-primary); letter-spacing: 4px;
+        }
+
         /* Responsive Móvil */
         @media (max-width: 450px) {
             .env-title { font-size: 80px; }
@@ -339,7 +364,7 @@
 </head>
 <body>
 
-    <!-- CONTENEDOR DE BRILLOS FLOTANTES -->
+    <!-- CONTENEDOR DE POLVO DE ORO -->
     <div class="sparkle-container" id="sparkles"></div>
 
     <!-- AUDIO OCULTO -->
@@ -359,7 +384,7 @@
         </div>
         <div class="envelope-wrapper" onclick="openEnvelope()">
             <div class="front-flap"></div>
-            <!-- SELLO PNG SIN FONDO -->
+            <!-- SELLO PNG -->
             <img src="assets/sello.png" class="wax-seal" alt="Sello de Ale">
             <div class="envelope"></div>
         </div>
@@ -369,10 +394,14 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main id="main-invitation">
         
-        <!-- HERO SECTION EDITORIAL -->
+        <!-- HERO SECTION (BLANCO) -->
         <section class="hero-section">
             <div class="anim-element anim-fade-up delay-1 tag-line">Mis XV Años</div>
-            <h1 class="anim-element anim-zoom delay-2 title-script">Ale</h1>
+            <h1 class="anim-element anim-zoom delay-2 title-script">
+                Ale
+                <!-- Estrella estática SVG -->
+                <svg class="static-sparkle" style="top: -10px; right: -20px;" viewBox="0 0 24 24"><path d="M12 0l3.5 8.5L24 12l-8.5 3.5L12 24l-3.5-8.5L0 12l8.5-3.5z"/></svg>
+            </h1>
             
             <div class="anim-element anim-fade-up delay-3 hero-frame">
                 <div class="hero-image-wrapper anim-element anim-reveal delay-3">
@@ -382,16 +411,19 @@
             <div class="anim-element anim-fade-up delay-4 line-divider"></div>
         </section>
 
-        <!-- MENSAJE ESPECIAL -->
-        <section class="section-block bg-pearl">
+        <!-- MENSAJE ESPECIAL (CREMA) -->
+        <section class="section-block bg-cream">
             <p class="anim-element anim-fade-up delay-1 body-serif" style="font-size: 30px; color: var(--gold-primary);">
                 “Porque eres parte de las personas que ocupan un lugar especial en mi corazón, deseo celebrar contigo este día tan importante de mi vida.”
             </p>
         </section>
 
-        <!-- FAMILIA -->
-        <section class="section-block bg-white">
-            <div class="anim-element anim-fade-up delay-1 info-title">Con el amor de mis padres</div>
+        <!-- FAMILIA (PERLA) -->
+        <section class="section-block bg-pearl">
+            <div class="anim-element anim-fade-up delay-1 info-title">
+                Con el amor de mis padres
+                <svg class="static-sparkle" style="top: -15px; left: -25px; width: 15px; height: 15px; animation-delay: 1s;" viewBox="0 0 24 24"><path d="M12 0l3.5 8.5L24 12l-8.5 3.5L12 24l-3.5-8.5L0 12l8.5-3.5z"/></svg>
+            </div>
             <div class="anim-element anim-fade-up delay-2 info-data">Manuel Alejandro Vázquez Flores</div>
             <div class="anim-element anim-fade-up delay-3" style="font-family: 'Cinzel', serif; font-size: 24px; color: var(--gold-primary); margin: 15px 0;">&</div>
             <div class="anim-element anim-fade-up delay-3 info-data">Claudia del Rayo Guzmán Pensado</div>
@@ -407,8 +439,8 @@
             </div>
         </section>
 
-        <!-- FECHA Y CALENDARIO -->
-        <section class="section-block bg-pearl">
+        <!-- FECHA Y CALENDARIO (CREMA) -->
+        <section class="section-block bg-cream">
             <div class="anim-element anim-fade-up delay-1 info-title">Será un honor contar con tu presencia el</div>
             <div class="anim-element anim-fade-up delay-2 info-data info-gold" style="font-size: 45px;">23 de Octubre</div>
             <div class="anim-element anim-fade-up delay-3 info-data" style="font-size: 28px; letter-spacing: 4px;">2026</div>
@@ -428,9 +460,12 @@
             <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=XV+A%C3%B1os+de+Ale&dates=20261023T235000Z/20261024T080000Z&details=Celebremos+juntos+este+d%C3%ADa+tan+especial" target="_blank" class="anim-element anim-fade-up delay-4 btn-solid">Agendar Evento</a>
         </section>
 
-        <!-- ITINERARIO -->
+        <!-- ITINERARIO (BLANCO) -->
         <section class="section-block bg-white">
-            <div class="anim-element anim-fade-up delay-1 info-title">Programa</div>
+            <div class="anim-element anim-fade-up delay-1 info-title">
+                Programa
+                <svg class="static-sparkle" style="top: -10px; right: -25px; width: 15px; height: 15px; animation-delay: 0.5s;" viewBox="0 0 24 24"><path d="M12 0l3.5 8.5L24 12l-8.5 3.5L12 24l-3.5-8.5L0 12l8.5-3.5z"/></svg>
+            </div>
             <div class="anim-element anim-fade-up delay-2 info-data">Itinerario del Evento</div>
             
             <div class="anim-element anim-fade-up delay-3 timeline-container">
@@ -476,7 +511,7 @@
             </div>
         </section>
 
-        <!-- UBICACIONES -->
+        <!-- UBICACIONES (PERLA) -->
         <section class="section-block bg-pearl">
             <div class="anim-element anim-fade-up delay-1 info-title">Ceremonia Religiosa</div>
             <div class="anim-element anim-fade-up delay-2 info-data">Catedral de Puebla</div>
@@ -499,7 +534,7 @@
             <a href="https://maps.app.goo.gl/v5NK7SVCzyY1jRnJ7?g_st=ic" target="_blank" class="anim-element anim-fade-up delay-4 btn-solid">Ver Ubicación</a>
         </section>
 
-        <!-- DRESS CODE -->
+        <!-- DRESS CODE (BLANCO) -->
         <section class="section-block bg-white">
             <div class="anim-element anim-fade-up delay-1 info-title">Dress Code</div>
             <div class="anim-element anim-fade-up delay-2 info-data info-gold" style="font-family: 'Cinzel', serif; font-size: 45px; margin: 25px 0; letter-spacing: 5px;">
@@ -515,29 +550,40 @@
             </div>
         </section>
 
-        <!-- MESA DE REGALOS -->
-        <section class="section-block bg-pearl">
-            <div class="anim-element anim-fade-up delay-1 info-title">Mesa de Regalos</div>
-            <div class="anim-element anim-fade-up delay-2 info-data">Lluvia de Sobres</div>
+        <!-- MESA DE REGALOS (CREMA - MEJORADA) -->
+        <section class="section-block bg-cream">
+            <div class="anim-element anim-fade-up delay-1 info-title">
+                Mesa de Regalos
+                <svg class="static-sparkle" style="top: -15px; left: -25px; width: 15px; height: 15px; animation-delay: 2s;" viewBox="0 0 24 24"><path d="M12 0l3.5 8.5L24 12l-8.5 3.5L12 24l-3.5-8.5L0 12l8.5-3.5z"/></svg>
+            </div>
             
-            <p class="anim-element anim-fade-up delay-3 body-serif" style="margin-top: 25px; font-size: 24px;">
-                Mi mejor regalo es tu presencia pero si quieres tener algún detalle conmigo te comparto dos opciones:
+            <p class="anim-element anim-fade-up delay-2 body-serif" style="margin-top: 15px; font-size: 24px;">
+                El regalo más invaluable es tu presencia. Sin embargo, si deseas tener un detalle adicional conmigo, puedes hacerlo de las siguientes maneras:
             </p>
-            <p class="anim-element anim-fade-up delay-4 body-serif" style="margin-top: 20px; font-size: 22px; color: var(--gold-primary);">
-                1. Lluvia de sobres el día del evento.<br>
-                2. Depósito o Transferencia.
-            </p>
+            
+            <!-- Lluvia de Sobres -->
+            <div class="anim-element anim-fade-up delay-3" style="margin-top: 40px;">
+                <svg viewBox="0 0 24 24" style="width: 45px; height: 45px; fill: var(--gold-primary); margin-bottom: 10px;">
+                    <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+                <div style="font-family: 'Cinzel', serif; font-size: 20px; font-weight: 600; color: var(--text-dark);">Lluvia de Sobres</div>
+                <div style="font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-muted); margin-top: 8px;">Habrá un buzón especial en la recepción el día del evento.</div>
+            </div>
 
-            <div class="anim-element anim-zoom delay-4" style="margin-top: 50px; font-family: 'Montserrat', sans-serif; font-size: 15px; border: 1px solid rgba(191, 149, 63, 0.3); padding: 40px; border-radius: 4px; background: #FFF; max-width: 420px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.05); position: relative; z-index: 2;">
-                <div style="margin-bottom: 15px; text-transform: uppercase; font-size: 14px; color: var(--text-muted); letter-spacing: 2px; font-weight: 600;">Datos Bancarios BBVA</div>
-                <div style="margin-bottom: 30px; font-size: 24px; font-weight: 500; letter-spacing: 3px; color: var(--text-dark);">4152 3138 0149 6741</div>
+            <!-- Datos Bancarios (Más pequeño) -->
+            <div class="anim-element anim-zoom delay-4" style="margin-top: 40px; font-family: 'Montserrat', sans-serif; font-size: 13px; border: 1px solid rgba(191, 149, 63, 0.3); padding: 30px; border-radius: 4px; background: #FFF; max-width: 320px; width: 100%; box-shadow: 0 15px 30px rgba(0,0,0,0.03); position: relative; z-index: 2;">
+                <div style="margin-bottom: 10px; text-transform: uppercase; font-size: 12px; color: var(--text-muted); letter-spacing: 2px; font-weight: 600;">Depósito o Transferencia</div>
+                <div style="margin-bottom: 25px; font-size: 18px; font-weight: 600; letter-spacing: 2px;">
+                    <!-- Etiqueta color forzada para prevenir azul en iOS -->
+                    <span style="color: var(--text-dark); text-decoration: none;">BBVA 4152 3138 0149 6741</span>
+                </div>
                 
-                <button onclick="copyAccount()" class="btn-solid" style="margin-top: 0; padding: 15px 30px; font-size: 11px;">Copiar Cuenta</button>
+                <button onclick="copyAccount()" class="btn-solid" style="margin-top: 0; padding: 12px 25px; font-size: 10px;">Copiar Cuenta</button>
             </div>
         </section>
 
-        <!-- PLAYLIST SPOTIFY -->
-        <section class="section-block bg-white">
+        <!-- PLAYLIST SPOTIFY (PERLA) -->
+        <section class="section-block bg-pearl">
             <div class="anim-element anim-fade-up delay-1 info-title">Música</div>
             <div class="anim-element anim-fade-up delay-2 info-data">Nuestra Playlist</div>
             <p class="anim-element anim-fade-up delay-3 body-serif" style="margin: 20px auto 40px auto;">
@@ -545,14 +591,14 @@
             </p>
             
             <div class="anim-element anim-zoom delay-4" style="width: 100%; max-width: 480px; position: relative; z-index: 2;">
-                <iframe data-testid="embed-iframe" style="border-radius:12px; box-shadow: 0 15px 40px rgba(0,0,0,0.1);" src="https://open.spotify.com/embed/playlist/4M4zME9bPar1BKb5VkiPGj?utm_source=generator&si=52b1e7d41acd4b5b" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                <iframe data-testid="embed-iframe" style="border-radius:12px; box-shadow: 0 15px 35px rgba(0,0,0,0.06);" src="https://open.spotify.com/embed/playlist/4M4zME9bPar1BKb5VkiPGj?utm_source=generator&si=52b1e7d41acd4b5b" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
             
             <a href="https://open.spotify.com/playlist/4M4zME9bPar1BKb5VkiPGj?si=c38cf2bcf0dd4cf7&pt=a36a9f352720d87ff29d42b9b31a0547" target="_blank" class="anim-element anim-fade-up delay-4 btn-solid">Agregar Canciones</a>
         </section>
 
-        <!-- GALERÍA EN VIVO -->
-        <section class="section-block bg-pearl">
+        <!-- GALERÍA EN VIVO (CREMA) -->
+        <section class="section-block bg-cream">
             <div class="anim-element anim-fade-up delay-1 info-title">Momentos</div>
             <div class="anim-element anim-fade-up delay-2 info-data">Galería en Vivo</div>
             <p class="anim-element anim-fade-up delay-3 body-serif" style="margin: 25px auto;">
@@ -561,7 +607,7 @@
             <a href="https://drive.google.com/drive/folders/1aUe1An-OoB36-KKo2gRzUu94rBvELeby?usp=sharing" target="_blank" class="anim-element anim-fade-up delay-4 btn-solid">Subir mis Fotos</a>
         </section>
 
-        <!-- RSVP Y MENSAJES -->
+        <!-- RSVP Y MENSAJES (BLANCO) -->
         <section class="section-block bg-white">
             <div class="anim-element anim-fade-up delay-1 info-title">RSVP</div>
             <div class="anim-element anim-fade-up delay-2 info-data">Confirmar Asistencia</div>
@@ -602,16 +648,22 @@
             <div class="anim-element anim-fade-up delay-4 form-group">
                 <textarea id="wish-message" class="input-line" placeholder="Deja un lindo mensaje para Ale..."></textarea>
             </div>
-            <button onclick="sendWish()" class="anim-element anim-fade-up delay-4 btn-solid" style="margin-bottom: 60px;">Enviar Mensaje</button>
+            <button onclick="sendWish()" class="anim-element anim-fade-up delay-4 btn-solid" style="margin-bottom: 40px;">Enviar Mensaje</button>
         </section>
+
+        <!-- FOOTER FIRMA DE DISEÑO -->
+        <footer class="concierge-footer">
+            Diseñado y elaborado por
+            <span class="brand">Invytia Premium Concierge</span>
+        </footer>
 
     </main>
 
     <script>
-        // --- EFECTO DE BRILLOS FLOTANTES ---
+        // --- EFECTO DE POLVO DE ORO ---
         function createSparkles() {
             const container = document.getElementById('sparkles');
-            for(let i=0; i<30; i++){
+            for(let i=0; i<35; i++){
                 let sparkle = document.createElement('div');
                 sparkle.classList.add('sparkle');
                 sparkle.style.left = Math.random() * 100 + 'vw';
