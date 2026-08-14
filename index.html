@@ -293,6 +293,24 @@
             font-weight: 600; box-shadow: 0 5px 15px rgba(191, 149, 63, 0.4);
         }
 
+        /* Cuenta Regresiva */
+        .countdown-wrapper {
+            width: 100%; max-width: 480px; margin: 40px auto 10px auto;
+            position: relative; z-index: 2;
+        }
+        .countdown-line {
+            display: flex; align-items: baseline; justify-content: center;
+            flex-wrap: nowrap; white-space: nowrap;
+            font-family: 'Cinzel', serif; font-weight: 600; color: var(--gold-primary);
+            font-size: 26px; letter-spacing: 2px;
+            background: #FFF; border: 1px solid rgba(191, 149, 63, 0.3);
+            border-radius: 30px; padding: 18px 20px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.04);
+            overflow-x: auto;
+        }
+        .countdown-line span.cd-unit { color: var(--text-dark); font-size: 12px; font-weight: 500; letter-spacing: 1px; margin: 0 3px 0 4px; text-transform: uppercase; }
+        .countdown-line span.cd-sep { color: var(--text-muted); margin: 0 4px; font-weight: 400; }
+
         /* Mapas */
         .map-box {
             width: 100%; max-width: 600px; height: 350px; margin: 30px auto;
@@ -359,6 +377,8 @@
             .envelope::before, .envelope::after { border-left-width: 150px; border-right-width: 150px; border-top-width: 97px; border-bottom-width: 97px; }
             .front-flap { border-left-width: 150px; border-right-width: 150px; border-top-width: 105px; }
             .wax-seal { width: 60px; height: 60px; top: 85px; }
+            .countdown-line { font-size: 18px; padding: 14px 12px; }
+            .countdown-line span.cd-unit { font-size: 10px; }
         }
     </style>
 </head>
@@ -442,6 +462,7 @@
         <!-- FECHA Y CALENDARIO (CREMA) -->
         <section class="section-block bg-cream">
             <div class="anim-element anim-fade-up delay-1 info-title">Será un honor contar con tu presencia el</div>
+            <div class="anim-element anim-fade-up delay-2 info-data info-gold" style="font-size: 22px; letter-spacing: 5px; text-transform: uppercase; font-family: 'Cinzel', serif; font-weight: 600;">Viernes</div>
             <div class="anim-element anim-fade-up delay-2 info-data info-gold" style="font-size: 45px;">23 de Octubre</div>
             <div class="anim-element anim-fade-up delay-3 info-data" style="font-size: 28px; letter-spacing: 4px;">2026</div>
 
@@ -454,6 +475,13 @@
                     <div class="cal-day">11</div><div class="cal-day">12</div><div class="cal-day">13</div><div class="cal-day">14</div><div class="cal-day">15</div><div class="cal-day">16</div><div class="cal-day">17</div>
                     <div class="cal-day">18</div><div class="cal-day">19</div><div class="cal-day">20</div><div class="cal-day">21</div><div class="cal-day">22</div><div class="cal-day active">23</div><div class="cal-day">24</div>
                     <div class="cal-day">25</div><div class="cal-day">26</div><div class="cal-day">27</div><div class="cal-day">28</div><div class="cal-day">29</div><div class="cal-day">30</div><div class="cal-day">31</div>
+                </div>
+            </div>
+
+            <!-- CUENTA REGRESIVA -->
+            <div class="anim-element anim-zoom delay-4 countdown-wrapper">
+                <div class="countdown-line" id="countdown">
+                    Calculando...
                 </div>
             </div>
 
@@ -573,9 +601,9 @@
             <!-- Datos Bancarios (Más pequeño) -->
             <div class="anim-element anim-zoom delay-4" style="margin-top: 40px; font-family: 'Montserrat', sans-serif; font-size: 13px; border: 1px solid rgba(191, 149, 63, 0.3); padding: 30px; border-radius: 4px; background: #FFF; max-width: 320px; width: 100%; box-shadow: 0 15px 30px rgba(0,0,0,0.03); position: relative; z-index: 2;">
                 <div style="margin-bottom: 10px; text-transform: uppercase; font-size: 12px; color: var(--text-muted); letter-spacing: 2px; font-weight: 600;">Depósito o Transferencia</div>
-                <div style="margin-bottom: 25px; font-size: 18px; font-weight: 600; letter-spacing: 2px;">
+                <div style="margin-bottom: 25px; font-size: 16px; font-weight: 600; letter-spacing: 1.5px; white-space: nowrap; overflow-x: auto; text-align: center;">
                     <!-- Etiqueta color forzada para prevenir azul en iOS -->
-                    <span style="color: var(--text-dark); text-decoration: none;">BBVA 4152 3138 0149 6741</span>
+                    <span style="color: var(--text-dark); text-decoration: none; white-space: nowrap;">BBVA 4152 3138 0149 6741</span>
                 </div>
                 
                 <button onclick="copyAccount()" class="btn-solid" style="margin-top: 0; padding: 12px 25px; font-size: 10px;">Copiar Cuenta</button>
@@ -755,6 +783,42 @@
                 alert("Hubo un error al copiar la cuenta. Por favor, inténtalo manualmente.");
             });
         }
+
+        // --- CUENTA REGRESIVA (Actualiza segundo a segundo) ---
+        function startCountdown() {
+            // Evento: 23 de Octubre de 2026, 18:50 hrs (hora local de Puebla/CDMX)
+            const eventDate = new Date("2026-10-23T18:50:00-06:00").getTime();
+            const countdownEl = document.getElementById("countdown");
+
+            function updateCountdown() {
+                const now = new Date().getTime();
+                const distance = eventDate - now;
+
+                if (distance <= 0) {
+                    countdownEl.innerHTML = "¡Hoy es el gran día!";
+                    clearInterval(countdownTimer);
+                    return;
+                }
+
+                const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                countdownEl.innerHTML =
+                    days + '<span class="cd-unit">d</span>' +
+                    '<span class="cd-sep">:</span>' +
+                    String(hours).padStart(2, '0') + '<span class="cd-unit">h</span>' +
+                    '<span class="cd-sep">:</span>' +
+                    String(minutes).padStart(2, '0') + '<span class="cd-unit">m</span>' +
+                    '<span class="cd-sep">:</span>' +
+                    String(seconds).padStart(2, '0') + '<span class="cd-unit">s</span>';
+            }
+
+            updateCountdown();
+            const countdownTimer = setInterval(updateCountdown, 1000);
+        }
+        startCountdown();
 
         // --- ENVÍO A WHATSAPP ---
         const numeroDestino = "522223619821";
