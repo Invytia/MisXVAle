@@ -640,9 +640,15 @@
         <section class="section-block bg-white">
             <div class="anim-element anim-fade-up delay-1 info-title">RSVP</div>
             <div class="anim-element anim-fade-up delay-2 info-data">Confirmar Asistencia</div>
-            <p class="anim-element anim-fade-up delay-3 body-serif" style="margin: 15px auto 40px auto;">
+            <p class="anim-element anim-fade-up delay-3 body-serif" style="margin: 15px auto 30px auto;">
                 Agradeceremos tu confirmación lo antes posible.
             </p>
+
+            <!-- SISTEMA DE PASES DIGITALES INVYTIA -->
+            <div id="pases-container" class="anim-element anim-fade-up delay-3" style="display: none; margin-bottom: 30px; padding: 20px; border: 1px solid rgba(191, 149, 63, 0.3); border-radius: 4px; background: var(--bg-pearl); max-width: 300px; width: 100%;">
+                <div style="font-family: 'Cinzel', serif; font-size: 12px; color: var(--gold-primary); letter-spacing: 3px; text-transform: uppercase;">Pases Reservados</div>
+                <div id="pases-number" style="font-family: 'Cormorant Garamond', serif; font-size: 45px; color: var(--text-dark); font-weight: 600; line-height: 1; margin-top: 5px;">0</div>
+            </div>
 
             <div class="anim-element anim-fade-up delay-4 form-group">
                 <input type="text" id="rsvp-name" class="input-line" placeholder="Tu nombre y apellido">
@@ -689,6 +695,38 @@
     </main>
 
     <script>
+        // --- SISTEMA DE PASES DIGITALES INVYTIA ---
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pasesParam = urlParams.get('p');
+            
+            if (pasesParam && !isNaN(pasesParam) && pasesParam > 0) {
+                const totalPases = parseInt(pasesParam);
+                
+                // Mostrar UI de pases
+                const pasesContainer = document.getElementById('pases-container');
+                const pasesNumber = document.getElementById('pases-number');
+                if (pasesContainer && pasesNumber) {
+                    pasesContainer.style.display = 'block';
+                    pasesNumber.innerText = totalPases;
+                }
+
+                // Limitar opciones del select de RSVP
+                const rsvpGuests = document.getElementById('rsvp-guests');
+                if (rsvpGuests) {
+                    // Limpiamos las opciones estáticas
+                    rsvpGuests.innerHTML = '<option value="" disabled selected>¿Cuántas personas asisten?</option>';
+                    // Generamos opciones limitadas al número del parámetro
+                    for (let i = 1; i <= totalPases; i++) {
+                        const option = document.createElement('option');
+                        option.value = i;
+                        option.innerText = i === 1 ? '1 persona' : i + ' personas';
+                        rsvpGuests.appendChild(option);
+                    }
+                }
+            }
+        });
+
         // --- EFECTO DE POLVO DE ORO ---
         function createSparkles() {
             const container = document.getElementById('sparkles');
